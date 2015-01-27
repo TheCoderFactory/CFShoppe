@@ -141,7 +141,7 @@ class CreateShoppeInitialSchema < ActiveRecord::Migration
       t.integer  "tax_rate_id"
       t.datetime "created_at"
       t.datetime "updated_at"
-      t.boolean  "featured",                                    default: false
+      t.boolean  "featured",                                    default: true
       t.text     "in_the_box"
       t.boolean  "stock_control",                               default: true
       t.boolean  "default",                                     default: false
