@@ -1,0 +1,180 @@
+<%# @page_title = shoppe.variants.variants + ' - ' + @product.name %>
+<%= content_for :header do %>
+  <p class="buttons">
+    <%= link_to t('shoppe.variants.back_to_variants'), [@product, :variants], :class => 'button' %>
+  </p>
+  <h2 class="products">
+    <%= t('shoppe.variants.variants_of', product:@product.name) %>
+  </h2>
+<% end %>
+<%= form_for [@product, @variant], :url => @variant.new_record? ? product_variants_path(@product) : product_variant_path(@product, @variant), :html => {:multipart => true} do |f| %>
+  <%= f.error_messages %>
+  <%= field_set_tag t('shoppe.variants.product_information') do %>
+    <div class="splitContainer">
+      <dl class="third">
+        <dt>
+          <%= f.label :name, t('shoppe.variants.name') %>
+        </dt>
+        <dd>
+          <%= f.text_field :name, :class => 'text focus' %>
+        </dd>
+      </dl>
+      <dl class="third">
+        <dt>
+          <%= f.label :permalink, t('shoppe.variants.permalink') %>
+        </dt>
+        <dd>
+          <%= f.text_field :permalink, :class => 'text' %>
+        </dd>
+      </dl>
+      <dl class="third">
+        <dt>
+          <%= f.label :sku, t('shoppe.variants.sku') %>
+        </dt>
+        <dd>
+          <%= f.text_field :sku, :class => 'text' %>
+        </dd>
+      </dl>
+    </div>
+  <% end %>
+  <%= field_set_tag t('shoppe.variants.location') do %>
+    <div class="splitContainer">
+      <dl class="half">
+        <dt>
+          <%= f.label :location_id, t('shoppe.variants.location') %>
+        </dt>
+        <dd>
+          <%= f.collection_select :location_id, Shoppe::Location.all, :id, :name, {:include_blank => true}, {:class => 'chosen-with-deselect', :data => {:placeholder => t('shoppe.variants.location')}} %>
+        </dd>
+      </dl>
+      <dl class="half">
+        <dt>
+          <%= f.label :image, t('shoppe.variants.image') %>
+        </dt>
+        <dd>
+        <%# attachment_preview @variant.default_image, :hide_if_blank => true %>
+        <p>
+          <%= f.file_field :default_image %>
+        </p>
+      </dd>
+      </dl>
+    </div>
+  <% end %>
+  
+  <%= field_set_tag t("shoppe.variants.dates") do %>
+    <div class="splitContainer">
+      <dl class="quarter">
+        <dt>
+          <%= f.label :start_date, t('shoppe.variants.start_date') %>
+        </dt>
+        <dd>
+          <%= f.date_field :start_date, :class => 'date' %>
+        </dd>
+      </dl>
+      <dl class="quarter">
+        <dt>
+          <%= f.label :end_date, t('shoppe.variants.end_date') %>
+        </dt>
+        <dd>
+          <%= f.date_field :end_date, :class => 'date' %>
+        </dd>
+      </dl>
+      <dl class="quarter">
+        <dt>
+          <%= f.label :start_time, t('shoppe.variants.start_time') %>
+        </dt>
+        <dd>
+          <%= f.time_select :start_time, class: 'time' %>
+        </dd>
+      </dl>
+      <dl class="quarter">
+        <dt>
+          <%= f.label :end_time, t('shoppe.variants.end_time') %>
+        </dt>
+        <dd>
+          <%= f.time_select :end_time, class: 'time' %>
+        </dd>
+      </dl>
+    </div>
+  <% end %>
+  <%= field_set_tag t("shoppe.variants.pricing") do %>
+    <div class="splitContainer">
+      <dl class="third">
+        <dt>
+          <%= f.label :price, t('shoppe.variants.price') %>
+        </dt>
+        <dd>
+          <%= f.text_field :price, :class => 'text' %>
+        </dd>
+      </dl>
+      <dl class="third">
+        <dt>
+          <%= f.label :cost_price, t('shoppe.variants.cost_price') %>
+        </dt>
+        <dd>
+          <%= f.text_field :cost_price, :class => 'text' %>
+        </dd>
+      </dl>
+      <dl class="third">
+        <dt>
+          <%= f.label :tax_rate_id, t('shoppe.variants.tax_rate') %>
+        </dt>
+        <dd>
+          <%= f.collection_select :tax_rate_id, Shoppe::TaxRate.ordered, :id, :description, {:include_blank => true}, {:class => 'chosen-with-deselect', :data => {:placeholder => t('shoppe.variants.no_tax')}} %>
+        </dd>
+      </dl>
+    </div>
+  <% end %>
+  <%= field_set_tag t('shoppe.variants.stock_control') do %>
+    <div class="splitContainer">
+      <dl class="half">
+        <dt>
+          <%= f.label :weight, t('shoppe.variants.weight') %>
+        </dt>
+        <dd>
+          <%= f.text_field :weight, :class => 'text' %>
+        </dd>
+      </dl>
+      <dl class="half">
+        <dt>
+          <%= f.label :stock_control, t('shoppe.variants.stock_control') %>
+        </dt>
+        <dd class="checkbox">
+          <%= f.check_box :stock_control %>
+          <%= f.label :stock_control, t('shoppe.variants.enable_stock_control?') %>
+        </dd>
+      </dl>
+    </div>
+  <% end %>
+  <%= field_set_tag t('shoppe.variants.website_properties') do %>
+    <div class="splitContainer">
+      <dl class="half">
+        <dt>
+          <%= f.label :active, t('shoppe.variants.on_sale?') %>
+        </dt>
+        <dd class="checkbox">
+          <%= f.check_box :active %>
+          <%= f.label :active, t('shoppe.variants.on_sale_info') %>
+        </dd>
+      </dl>
+      <dl class="half">
+        <dt>
+          <%= f.label :default, t('shoppe.variants.default_variant?') %>
+        </dt>
+        <dd class="checkbox">
+          <%= f.check_box :default %>
+          <%= f.label :default, t('shoppe.variants.default_variant_info') %>
+        </dd>
+      </dl>
+    </div>
+  <% end %>
+  <p class="submit">
+    <% unless @variant.new_record? %>
+      <span class="right">
+        <%= link_to t('shoppe.delete'), product_variant_path(@product, @variant), :class => 'button purple', :method => :delete, :data => {:confirm => t('shoppe.variants.delete_confirmation')} %>
+      </span>
+    <% end %>
+    <%= f.submit t('shoppe.variants.save_variant'), :class => 'button green' %>
+    <%= link_to t('shoppe.cancel'), :products, :class => 'button' %>
+  </p>
+<% end %>

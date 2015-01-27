@@ -2,6 +2,7 @@ module Shoppe
   class ApplicationController < ActionController::Base
     
     before_filter :login_required
+
     
     rescue_from ActiveRecord::DeleteRestrictionError do |e|
       redirect_to request.referer || root_path, :alert => e.message
@@ -39,6 +40,8 @@ module Shoppe
         @user = User.first
       end
     end
+
+    
     
     helper_method :current_user, :logged_in?
     

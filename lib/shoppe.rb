@@ -9,8 +9,10 @@ require 'ransack'
 
 require 'nifty/utils'
 require 'nifty/key_value_store'
-require 'nifty/attachments'
+# require 'nifty/attachments'
 require 'nifty/dialog'
+require 'carrierwave'
+require 'cloudinary'
 
 module Shoppe
   class << self

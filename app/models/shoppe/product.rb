@@ -10,9 +10,10 @@ module Shoppe
     require_dependency 'shoppe/product/variants'
 
     # Products have a default_image and a data_sheet
-    attachment :default_image
-    attachment :data_sheet
-
+    # attachment :default_image 
+    # attachment :data_sheet
+    mount_uploader :default_image, Shoppe::ProductImageUploader
+    mount_uploader :data_sheet, Shoppe::ProductSpecSheetUploader
     # The product's category
     #
     # @return [Shoppe::ProductCategory]
@@ -31,6 +32,8 @@ module Shoppe
 
     # Stock level adjustments for this product
     has_many :stock_level_adjustments, :dependent => :destroy, :class_name => 'Shoppe::StockLevelAdjustment', :as => :item
+
+    belongs_to :location, class_name: "Shoppe::Location"
 
     # Validations
     with_options :if => Proc.new { |p| p.parent.nil? } do |product|
@@ -56,6 +59,8 @@ module Shoppe
 
     # All products ordered with default items first followed by name ascending
     scope :ordered, -> {order(:default => :desc, :name => :asc)}
+
+    scope :ordered_by_date, -> {order(:start_date => :asc)}
 
     # Return the name of the product
     #
@@ -143,6 +148,16 @@ module Shoppe
                 Shoppe::ProductCategory.create(name: row["category_name"]).id
               end
             end
+
+            unless row["parent"].nil?
+              product.parent_id = Shoppe::Product.find_by(name: row["parent"]).id
+              product.start_date = row["start_date"]
+              product.end_date = row["end_date"]
+              product.start_time = row["start_time"]
+              product.end_time = row["end_time"]
+              product.location = Shoppe::Location.find_by(name: row["location"])
+            end
+            
 
             product.save!
 

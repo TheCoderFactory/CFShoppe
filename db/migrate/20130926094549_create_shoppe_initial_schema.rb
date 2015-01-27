@@ -34,6 +34,21 @@ class CreateShoppeInitialSchema < ActiveRecord::Migration
       t.string   "tracking_url"
     end
 
+    create_table "shoppe_locations" do |t|
+      t.string   "name"
+      t.string  "city"
+      t.string  "building"
+      t.string  "street"
+      t.string  "suburb"
+      t.string  "state"
+      t.string  "postcode"
+      t.string  "website"
+      t.string  "map_link"
+      t.string  "logo"
+      t.datetime "created_at"
+      t.datetime "updated_at"
+    end
+
     create_table "shoppe_order_items" do |t|
       t.integer  "order_id"
       t.integer  "ordered_item_id"
@@ -130,6 +145,13 @@ class CreateShoppeInitialSchema < ActiveRecord::Migration
       t.text     "in_the_box"
       t.boolean  "stock_control",                               default: true
       t.boolean  "default",                                     default: false
+      t.integer "location_id"
+      t.date    "start_date"
+      t.date    "end_date"
+      t.time    "start_time"
+      t.time    "end_time"
+      t.string  "default_image"
+      t.string  "data_sheet"
     end
 
     create_table "shoppe_settings" do |t|
@@ -168,7 +190,7 @@ class CreateShoppeInitialSchema < ActiveRecord::Migration
   end
   
   def down
-    [:users, :tax_rates, :stock_level_adjustments, :settings, :products, :product_categories, :product_attributes, :orders, :order_items, :delivery_services, :delivery_service_prices, :countries].each do |table|
+    [:locations, :users, :tax_rates, :stock_level_adjustments, :settings, :products, :product_categories, :product_attributes, :orders, :order_items, :delivery_services, :delivery_service_prices, :countries].each do |table|
       drop_table "shoppe_#{table}"
     end
   end

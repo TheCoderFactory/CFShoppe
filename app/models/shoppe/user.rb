@@ -2,6 +2,8 @@ module Shoppe
   class User < ActiveRecord::Base
 
     self.table_name = 'shoppe_users'
+
+    has_many :promotions, class_name: 'Shoppe::Promotion'
   
     has_secure_password
   

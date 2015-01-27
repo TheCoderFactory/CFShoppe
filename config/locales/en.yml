@@ -427,6 +427,7 @@ en:
       price: Price
       price_variants: Price/Variants
       pricing: Pricing
+      location: Location
       product_category: Product category
       product_information: Product Information
       products: Products
@@ -571,6 +572,12 @@ en:
       permalink: Permalink
       price: Price
       pricing: Pricing
+      location: Location
+      dates: Dates
+      start_date: Start date
+      end_date: End date
+      start_time: Start time
+      end_time: End time
       product_information: Product Information
       save_variant: Save Variant
       sku: SKU
@@ -598,6 +605,21 @@ en:
         users: Users
         countries: Countries
         settings: Settings
+        locations: Locations
+        promotions: Promotions
+
+    locations:
+      new_location: New location
+      locations: Locations
+      no_locations: No locations
+      name: Name
+
+    promotions:
+      new_promotion: New promotion
+      promotions: Promotions
+      no_promotions: No promotions
+      name: Name
+
 
     settings:
 

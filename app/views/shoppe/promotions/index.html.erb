@@ -1,0 +1,43 @@
+<% @page_title = t('shoppe.navigation.promotions') %>
+<%= content_for :header do %>
+  <p class="buttons">
+    <%= link_to t('shoppe.promotions.new_promotion'), :new_promotion, :class => 'button green' %>
+  </p>
+  <h2 class="products">
+    <%= t('shoppe.promotions.promotions') %>
+  </h2>
+<% end %>
+<div class="table">
+  <table class="data">
+    <thead>
+      <tr>
+        <th>
+          <%= t('shoppe.promotions.name') %>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if @promotions.empty? %>
+        <tr class="empty">
+          <td>
+            <%= t('shoppe.promotions.no_promotions') %>
+          </td>
+        </tr>
+      <% else %>
+        <% for promotion in @promotions %>
+          <tr>
+            <td>
+              <%= link_to promotion.name, [:edit, promotion] %> <span style="text-align:right;">[<%= link_to 'Delete', promotion, method: :delete, data: { confirm: 'Are you sure?' } %>]</span> 
+              <a href="<%= Shoppe.settings.site_url %>/?promo_code=<%= promotion.code %>"><%= Shoppe.settings.site_url %>/?promo_code=<%= promotion.code %></a>
+              <% if promotion.used_on_date.nil? %>
+                UNUSED
+              <% else %>
+                USED
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+</div>

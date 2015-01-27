@@ -1,0 +1,37 @@
+<% @page_title = t('shoppe.navigation.locations') %>
+<%= content_for :header do %>
+  <p class="buttons">
+    <%= link_to t('shoppe.locations.new_location'), :new_location, :class => 'button green' %>
+  </p>
+  <h2 class="products">
+    <%= t('shoppe.locations.locations') %>
+  </h2>
+<% end %>
+<div class="table">
+  <table class="data">
+    <thead>
+      <tr>
+        <th>
+          <%= t('shoppe.locations.name') %>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if @locations.empty? %>
+        <tr class="empty">
+          <td>
+            <%= t('shoppe.locations.no_locations') %>
+          </td>
+        </tr>
+      <% else %>
+        <% for location in @locations %>
+          <tr>
+            <td>
+              <%= link_to location.name, [:edit, location] %> [<%= link_to 'Delete', location, method: :delete, data: { confirm: 'Are you sure?' } %>]
+            </td>
+          </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+</div>

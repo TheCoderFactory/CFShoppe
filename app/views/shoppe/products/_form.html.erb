@@ -1,0 +1,251 @@
+<%= form_for @product, :html => {:multipart => true} do |f| %>
+  <%= f.error_messages %>
+  <%= field_set_tag  t('shoppe.products.product_information') do %>
+    <dl>
+      <dt>
+        <%= f.label :product_category_id, t('shoppe.products.product_category') %>
+      </dt>
+      <dd>
+        <%= f.collection_select :product_category_id, Shoppe::ProductCategory.ordered, :id, :name, {:prompt => false}, {:class => 'chosen'} %>
+      </dd>
+    </dl>
+    <div class="splitContainer">
+      <dl class="third">
+        <dt>
+          <%= f.label :name, t('shoppe.products.name') %>
+        </dt>
+        <dd>
+          <%= f.text_field :name, :class => 'text focus' %>
+        </dd>
+      </dl>
+      <dl class="third">
+        <dt>
+          <%= f.label :permalink, t('shoppe.products.permalink') %>
+        </dt>
+        <dd>
+          <%= f.text_field :permalink, :class => 'text' %>
+        </dd>
+      </dl>
+      <dl class="third">
+        <dt>
+          <%= f.label :sku, t('shoppe.products.sku') %>
+        </dt>
+        <dd>
+          <%= f.text_field :sku, :class => 'text' %>
+        </dd>
+      </dl>
+    </div>
+    <dl>
+      <dt>
+        <%= f.label :description, t('shoppe.products.description') %>
+      </dt>
+      <dd>
+        <%= f.text_area :description, :class => 'text' %>
+      </dd>
+    </dl>
+    <dl>
+      <dt>
+        <%= f.label :short_description, t('shoppe.products.short_description') %>
+      </dt>
+      <dd>
+        <%= f.text_area :short_description, :class => 'text' %>
+      </dd>
+    </dl>
+    <dl>
+      <dt>
+        <%= f.label :in_the_box, t('shoppe.products.in_the_box') %>
+      </dt>
+      <dd>
+        <%= f.text_area :in_the_box, :class => 'text' %>
+      </dd>
+    </dl>
+  <% end %>
+  <%= field_set_tag t('shoppe.products.attributes') do %>
+    <div class="margin">
+      <table class="productAttributes">
+        <thead>
+          <tr>
+            <td>
+              <%= t('shoppe.products.name') %>
+            </td>
+            <td>
+              <%= t('shoppe.products.value') %>
+            </td>
+            <td class="searchable">
+              <%= t('shoppe.products.searchable?') %>
+            </td>
+            <td class="searchable">
+              <%= t('shoppe.products.public?') %>
+            </td>
+            <td class="remove">
+              <%= t('shoppe.products.remove') %>
+            </td>
+            <td></td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="template" style="display:none;">
+            <td>
+              <%= text_field_tag 'product[product_attributes_array][][key]', '', :placeholder => t('shoppe.products.name') %>
+            </td>
+            <td>
+              <%= text_field_tag 'product[product_attributes_array][][value]', '', :placeholder => t('shoppe.products.value') %>
+            </td>
+            <td class="searchable">
+              <%= check_box_tag 'product[product_attributes_array][][searchable]', '1' %>
+            </td>
+            <td class="searchable">
+              <%= check_box_tag 'product[product_attributes_array][][public]', '1' %>
+            </td>
+            <td class="remove">
+              <%= link_to t('shoppe.remove') , '#', :class => 'button button-mini purple' %>
+            </td>
+            <td class="handle"></td>
+          </tr>
+          <% for attribute in @product.product_attributes %>
+            <tr>
+              <td>
+                <%= text_field_tag 'product[product_attributes_array][][key]', attribute.key, :placeholder => t('shoppe.products.name') %>
+              </td>
+              <td>
+                <%= text_field_tag 'product[product_attributes_array][][value]', attribute.value, :placeholder => t('shoppe.products.value') %>
+              </td>
+              <td class="searchable">
+                <%= check_box_tag 'product[product_attributes_array][][searchable]', '1', attribute.searchable? %>
+              </td>
+              <td class="searchable">
+                <%= check_box_tag 'product[product_attributes_array][][public]', '1', attribute.public? %>
+              </td>
+              <td class="remove">
+                <%= link_to t("shoppe.remove"), '#', :class => 'button button-mini purple' %>
+              </td>
+              <td class="handle"></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <p class="addAttribute">
+        <%= link_to t('shoppe.products.add_attribute') , '#', :data => {:behavior => 'addAttributeToAttributesTable'}, :class => 'button button-mini green' %>
+      </p>
+    </div>
+  <% end %>
+  <%= field_set_tag t('shoppe.products.attachments') do %>
+    <div class="splitContainer">
+      <dl class="half">
+        <% unless @product.default_image.nil? %>
+          <%= image_tag(@product.default_image_url, width: '200px') %>
+        <% end %>
+        <dt>
+          <%= f.label :default_image_file, t('shoppe.products.default_image') %>
+        </dt>
+        <dd>
+          <p>
+            <%= f.file_field :default_image %>
+          </p>
+        </dd>
+      </dl>
+      <dl class="half">
+        <dt>
+          <%= f.label :data_sheet_file, t('shoppe.products.datasheet') %>
+        </dt>
+        <dd>
+          <p>
+            <%= f.file_field :data_sheet %>
+          </p>
+        </dd>
+      </dl>
+    </div>
+  <% end %>
+  <% unless @product.has_variants? %>
+    <%= field_set_tag t('shoppe.products.pricing') do %>
+      <div class="splitContainer">
+        <dl class="third">
+          <dt>
+            <%= f.label :price, t('shoppe.products.price') %>
+          </dt>
+          <dd>
+            <div class="moneyInput">
+              <div class="currency">
+                <%= Shoppe.settings.currency_unit.html_safe %>
+              </div>
+              <%= f.text_field :price, :class => 'text' %>
+            </div>
+          </dd>
+        </dl>
+        <dl class="third">
+          <dt>
+            <%= f.label :cost_price, t('shoppe.products.cost_price') %>
+          </dt>
+          <dd>
+            <div class="moneyInput">
+              <div class="currency">
+                <%= Shoppe.settings.currency_unit.html_safe %>
+              </div>
+              <%= f.text_field :cost_price, :class => 'text' %>
+            </div>
+          </dd>
+        </dl>
+        <dl class="third">
+          <dt>
+            <%= f.label :tax_rate_id, t('shoppe.products.tax_rate') %>
+          </dt>
+          <dd>
+            <%= f.collection_select :tax_rate_id, Shoppe::TaxRate.ordered, :id, :description, {:include_blank => true}, {:class => 'chosen-with-deselect', :data => {:placeholder => t('shoppe.products.no_tax')}} %>
+          </dd>
+        </dl>
+      </div>
+    <% end %>
+    <%= field_set_tag  t('shoppe.products.stock_control') do %>
+      <div class="splitContainer">
+        <dl class="half">
+          <dt>
+            <%= f.label :weight, t('shoppe.products.weight') %>
+          </dt>
+          <dd>
+            <%= f.text_field :weight, :class => 'text' %>
+          </dd>
+        </dl>
+        <dl class="half">
+          <dt>
+            <%= f.label :stock_control,  t('shoppe.products.stock_control') %>
+          </dt>
+          <dd class="checkbox">
+            <%= f.check_box :stock_control %>
+            <%= f.label :stock_control, t('shoppe.products.enable_stock_control?') %>
+          </dd>
+        </dl>
+      </div>
+    <% end %>
+  <% end %>
+  <%= field_set_tag  t('shoppe.products.website_properties') do %>
+    <div class="splitContainer">
+      <dl class="half">
+        <dt>
+          <%= f.label :active,  t('shoppe.products.on_sale?') %>
+        </dt>
+        <dd class="checkbox">
+          <%= f.check_box :active %>
+          <%= f.label :active,  t('shoppe.products.on_sale_info') %>
+        </dd>
+      </dl>
+      <dl class="half">
+        <dt>
+          <%= f.label :featured,  t('shoppe.products.featured?') %>
+        </dt>
+        <dd class="checkbox">
+          <%= f.check_box :featured %>
+          <%= f.label :featured, t('shoppe.products.featured_info') %>
+        </dd>
+      </dl>
+    </div>
+  <% end %>
+  <p class="submit">
+    <% unless @product.new_record? %>
+      <span class="right">
+        <%= link_to t('shoppe.delete') , @product, :class => 'button purple', :method => :delete, :data => {:confirm => "Are you sure you wish to remove this product?"} %>
+      </span>
+    <% end %>
+    <%= f.submit t('shoppe.submit'),  :class => 'button green' %>
+    <%= link_to t('shoppe.cancel'), :products, :class => 'button' %>
+  </p>
+<% end %>

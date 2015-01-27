@@ -1,0 +1,49 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @promotion.name %>
+</p>
+
+<p>
+  <strong>Code:</strong>
+  <%= @promotion.code %>
+</p>
+
+<p>
+  <strong>Start date:</strong>
+  <%= @promotion.start_date %>
+</p>
+
+<p>
+  <strong>Expiry date:</strong>
+  <%= @promotion.expiry_date %>
+</p>
+
+<p>
+  <strong>Used on date:</strong>
+  <%= @promotion.used_on_date %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @promotion.user_id %>
+</p>
+
+<p>
+  <strong>Reason:</strong>
+  <%= @promotion.reason %>
+</p>
+
+<p>
+  <strong>Value:</strong>
+  <%= @promotion.value %>
+</p>
+
+<p>
+  <strong>Usage limit:</strong>
+  <%= @promotion.usage_limit %>
+</p>
+
+<%= link_to 'Edit', edit_promotion_path(@promotion) %> |
+<%= link_to 'Back', promotions_path %>

@@ -52,25 +52,32 @@ module Shoppe
     # The total price of the order before tax
     #
     # @return [BigDecimal]
-    def total_before_tax
-      self.delivery_price + self.items_sub_total
+    def total_before_tax(promotion_value)
+      self.delivery_price + self.items_sub_total - promotion_value
     end
 
     # The total amount of tax due on this order
     #
     # @return [BigDecimal]
-    def tax
+    def tax(promotion_value)
       self.delivery_tax_amount +
-      order_items.inject(BigDecimal(0)) { |t, i| t + i.tax_amount }
+      self.total_before_tax(promotion_value) * 0.1
     end
 
     # The total of the order including tax
     #
     # @return [BigDecimal]
-    def total
+    def total(promotion_value)
       self.delivery_price +
       self.delivery_tax_amount +
-      order_items.inject(BigDecimal(0)) { |t, i| t + i.total }
+      self.total_before_tax(promotion_value) +
+      self.tax(promotion_value)
+    end
+
+    def total_with_promo
+      self.delivery_price +
+      self.delivery_tax_amount +
+      self.total_order_less_promo
     end
 
     # The total amount due on the order
