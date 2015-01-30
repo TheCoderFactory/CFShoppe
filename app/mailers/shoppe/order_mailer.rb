@@ -3,12 +3,12 @@ module Shoppe
   
     def received(order)
       @order = order
-      mail :from => Shoppe.settings.outbound_email_address, :to => order.email_address, :subject => I18n.t('shoppe.order_mailer.received.subject', :default => "Order Confirmation")
+      mail :from => 'Coder Factory <workshops@thecoderfactory.com>', :to => order.email_address, :subject => I18n.t('shoppe.order_mailer.received.subject', :default => "Order Confirmation")
     end
   
     def accepted(order)
       @order = order
-      mail :from => Shoppe.settings.outbound_email_address, :to => order.email_address, :subject => I18n.t('shoppe.order_mailer.received.accepted', :default => "Order Accepted")
+      mail :from => 'Coder Factory <workshops@thecoderfactory.com>', :to => order.email_address, :subject => I18n.t('shoppe.order_mailer.received.accepted', :default => "Order Accepted")
     end
   
     def rejected(order)
